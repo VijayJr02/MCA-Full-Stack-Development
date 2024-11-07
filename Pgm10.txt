@@ -1,0 +1,52 @@
+import java.sql.*;
+import javax.sql.*;
+
+
+public class pgm10_connect
+ {
+    public static void main(String[] args)
+	{
+		String url = "jdbc:mysql://localhost:3306/pgm9_connect?useSSL=false";
+		String username = "root";
+		String password = "root";
+		Statement stmt;
+		ResultSet rs;
+   
+        try 
+		{
+            Connection con = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected to MySQL database successfully!");
+            stmt = con.createStatement();
+			
+			System.out.println("Creating a table");
+			String query_customer = "create table customer" + "(cid integer primary key,"+"name varchar(100),"+"dob date,"+"address varchar(255))";
+			stmt.executeUpdate(query_customer);
+			System.out.println("Table is created");
+			
+			System.out.println("Inserting records");
+			String r1 = "insert into customer(cid,name,dob,address)"+"values('101','Neeta','1999-08-20','Koramangala')";
+			stmt.executeUpdate(r1);
+			System.out.println("Row is inserted");
+			
+			System.out.println("Inserting records");
+			String r2 = "insert into customer(cid,name,dob,address)"+"values('102','Sheril','1999-08-20','Indiranagar')";
+			stmt.executeUpdate(r2);
+			System.out.println("Row is inserted");
+			
+			rs = stmt.executeQuery("select * from customer");
+			System.out.println("Displaying record");
+			while(rs.next())
+			{
+				System.out.println("ID: "+rs.getInt("cid"));
+				System.out.println("NAME: "+rs.getString("name"));
+				System.out.println("DOB: "+rs.getDate("dob"));
+				System.out.println("ADDRESS: "+rs.getString("address"));
+			}
+			con.close();
+        } 
+		catch (SQLException e)
+		{
+          e.printStackTrace();
+        }
+    }
+}
